@@ -15,3 +15,5 @@ help:
 msgblock:
   activated: "&aYou will no longer send or receive private messages. Type /%label% again to re-enable PMs"
   deactivated: "&aYou can now receive private messages again"
+
+reload: "&aTMessenger config successfully reloaded"

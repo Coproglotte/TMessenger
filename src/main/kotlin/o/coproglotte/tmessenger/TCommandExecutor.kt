@@ -87,6 +87,7 @@ class TCommandExecutor(private val tMessenger: TMessenger) : CommandExecutor {
             "tmessengerreload" -> {
                 if (sender.hasPermission(NODE_RELOAD)) {
                     tMessenger.reloadConfig()
+                    sendFormattedMessage(sender, "reload")
                     return true
                 } else {
                     sendFormattedMessage(sender, "help.permissionMissing", Pair(LABEL, label))
