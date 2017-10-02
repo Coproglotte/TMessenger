@@ -1,0 +1,16 @@
+format:
+  outgoing: "&7&oPM to %displayname% : &8%message%"
+  incoming: "&7&oPM from %displayname% : &8%message%"
+
+help:
+  syntax: "&c/%label% <User> <Message>"
+  replySyntax: "&c/%label% <Message>"
+  replyToNobody: "&cYou have to receive a private message from an online player before you can use /%label%"
+  offlinePlayer: "&cPlayer '%displayname%' is not connected"
+  permissionMissing: "&cYou do not have permission to run command /%label%"
+  messageBlocked: "&c%displayname% blocked private messages"
+  msgblockEnabled: "&cYou can't send private messages when you block them. Type /msgblock to accept PMs"
+
+msgblock:
+  activated: "&aYou will no longer send or receive private messages. Type /%label% again to re-enable PMs"
+  deactivated: "&aYou can now receive private messages again"

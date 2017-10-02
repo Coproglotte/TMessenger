@@ -1,0 +1,111 @@
+group 'o.coproglotte.tmessenger'
+version '0.2'
+ext.pluginName = 'TMessenger'
+
+def buildProp = new Properties()
+def propFile = file('build.properties')
+propFile.withInputStream {
+    stream -> buildProp.load(stream)
+}
+
+def serverPath = buildProp.getProperty('serverPath')
+def spigotJarName = buildProp.getProperty('spigotJarName')
+
+def baseJarName = "${ext.pluginName}-VERSION-bBUILD.jar"
+def prevBuildNumber = buildProp.getProperty('buildNumber')
+def buildNumber = prevBuildNumber.toInteger() + 1
+def jarName = baseJarName.replace('VERSION', version.toString()).replace('BUILD', buildNumber.toString())
+
+
+buildscript {
+    ext.kotlin_version = '1.1.51'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+
+repositories {
+    mavenCentral()
+
+    maven {
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        url 'https://hub.spigotmc.org/nexus/content/groups/public/'
+    }
+//    maven {
+//        url 'http://repo.dmulloy2.net/content/groups/public/'
+//        // Does not work
+//    }
+}
+
+apply plugin: 'idea'
+apply plugin: 'com.github.johnrengelman.shadow'
+sourceCompatibility = 1.8
+
+idea {
+    module {
+        downloadJavadoc = true
+    }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.spigotmc:spigot-api:1.12.2-R0.1-SNAPSHOT"
+
+    // Gradle won't download these dependencies
+    shadow files('libs/ProtocolLib-API-4.3.0.jar')
+    shadow files('libs/VanishNoPacket.jar')
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+shadowJar {
+    archiveName = jarName
+    dependencies {
+        include(dependency("org.jetbrains.kotlin:kotlin-stdlib"))
+    }
+
+    doLast {
+        buildProp.setProperty('buildNumber', buildNumber.toString())
+        buildProp.store(propFile.newWriter(), null)
+    }
+}
+
+task buildAndStartServer {
+    doLast {
+        delete fileTree("$serverPath/plugins") {
+            include baseJarName.replace('VERSION', '*').replace('BUILD', '*')
+        }
+
+        copy {
+            from "build/libs/$jarName"
+            into "$serverPath/plugins"
+        }
+
+        startTestServer(serverPath, spigotJarName)
+    }
+}
+
+buildAndStartServer.dependsOn(shadowJar)
+
+def startTestServer(String serverPath, String spigotJarName) {
+    exec {
+        workingDir serverPath
+        commandLine 'java', '-jar', spigotJarName
+    }
+}

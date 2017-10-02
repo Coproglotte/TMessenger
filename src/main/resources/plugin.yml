@@ -1,0 +1,21 @@
+name: TMessenger
+author: Coproglotte
+version: 0.2
+main: o.coproglotte.tmessenger.TMessenger
+
+depend:
+  [VanishNoPacket]
+
+commands:
+  msg:
+    description: Send a private message to an online player
+    aliases: [pm, w, whisp, whisper, tell, t]
+  reply:
+    description: Reply to a private message
+    aliases: [r, rep]
+  msgblock:
+    description: Block incoming and outgoing private messsages
+    aliases: [pmblock, blockmsg, blockpm]
+  tmessengerreload:
+    description: Reload TMessenger config files
+    aliases: [tmreload]
