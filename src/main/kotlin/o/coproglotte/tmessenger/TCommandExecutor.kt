@@ -30,7 +30,7 @@ class TCommandExecutor(private val tMessenger: TMessenger) : CommandExecutor {
                                 if (!sender.isVanished()) {
                                     tMessenger.replyMap.put(receiver, sender)
                                 }
-                                sendPrivateMessage(sender, receiver, args.joinToString(" "))
+                                sendPrivateMessage(sender, receiver, args.drop(1).joinToString(" "))
                                 return true
                             }
                         } else {
