@@ -1,6 +1,7 @@
 package o.coproglotte.tmessenger
 
-import o.coproglotte.tmessenger.TCommandExecutor.PMType.*
+import o.coproglotte.tmessenger.TCommandExecutor.PMType.MSG
+import o.coproglotte.tmessenger.TCommandExecutor.PMType.REPLY
 import o.coproglotte.tmessenger.utils.*
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
@@ -17,12 +18,10 @@ class TCommandExecutor(private val tMessenger: TMessenger) : CommandExecutor {
 
     override fun onCommand(commandSender: CommandSender, command: Command, label: String, args: Array<out String>?): Boolean {
         val sender = commandSender as? Player ?: return false
-        tMessenger.logger.info("command")
 
         when (command.name.toLowerCase()) {
 
             "msg" -> {
-                tMessenger.logger.info("${sender.displayName} triggered msg")
                 if (sender.hasPermission(NODE_CHAT)) {
                     if (args != null && args.size >= 2) {
                         val receiver = tMessenger.server.getPlayer(args[0])
@@ -111,6 +110,11 @@ class TCommandExecutor(private val tMessenger: TMessenger) : CommandExecutor {
 
         if (other.isBlockingPM()) {
             sendFormattedMessage(this, "help.msgblockEnabled")
+            return false
+        }
+
+        if (other == this) {
+            sendFormattedMessage(this, "help.selfMsg")
             return false
         }
 

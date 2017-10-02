@@ -7,6 +7,7 @@ help:
   replySyntax: "&c/%label% <Message>"
   replyToNobody: "&cYou have to receive a private message from an online player before you can use /%label%"
   offlinePlayer: "&cPlayer '%displayname%' is not connected"
+  selfMsg: "&cYou can't send private messages to yourself"
   permissionMissing: "&cYou do not have permission to run command /%label%"
   messageBlocked: "&c%displayname% blocked private messages"
   msgblockEnabled: "&cYou can't send private messages when you block them. Type /msgblock to accept PMs"
